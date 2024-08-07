@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,10 +19,12 @@ import com.joses.amphibian.screens.AmphibianViewModel
 import com.joses.amphibian.screens.HomeScreen
 import com.joses.amphibian.ui.theme.AmphibianTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.annotation.ExperimentalCoilApi
+import coil.imageLoader
 
 class MainActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,7 +36,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         TopAppBar(
-                            title = { Text(text ="Amphibian") }
+                            title = { Text(text ="Amphibian") },
+                            actions = {
+                                Button(
+                                    onClick = {
+                                        imageLoader.diskCache?.clear()
+                                        imageLoader.memoryCache?.clear()
+                                    }
+                                ) {
+                                    Text(text = "Clear Cache")
+                                }
+                            }
                         )
                     }
                 ) { innerPadding ->
@@ -47,7 +60,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

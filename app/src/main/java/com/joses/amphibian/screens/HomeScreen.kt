@@ -105,7 +105,8 @@ fun AmphibianCard(
                 style = MaterialTheme.typography.headlineMedium
             )
             AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
+                model = ImageRequest
+                    .Builder(context = LocalContext.current)
                     .data(data.imgSrc)
                     .crossfade(true)
                     .build(),

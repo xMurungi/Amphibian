@@ -22,7 +22,9 @@ sealed interface AmphibianUiState {
     object Loading: AmphibianUiState
 }
 
-class AmphibianViewModel(private val amphibianDataRepository: AmphibianDataRepository) : ViewModel() {
+class AmphibianViewModel(
+    private val amphibianDataRepository: AmphibianDataRepository
+) : ViewModel() {
     var amphibianUiState: AmphibianUiState by mutableStateOf(AmphibianUiState.Loading)
         private set
 
@@ -58,7 +60,7 @@ class AmphibianViewModel(private val amphibianDataRepository: AmphibianDataRepos
         ),
     )
 
-    fun getAmphibianData() {
+    private fun getAmphibianData() {
         viewModelScope.launch {
             amphibianUiState = AmphibianUiState.Loading
             amphibianUiState = try {

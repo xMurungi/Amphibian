@@ -1,14 +1,41 @@
 package com.joses.amphibian
 
 import android.app.Application
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
+import coil.request.CachePolicy
+import coil.util.DebugLogger
 import com.joses.amphibian.data.AppContainer
 import com.joses.amphibian.data.DefaultAppContainer
 
-class AmphibianDataApplication : Application() {
+class AmphibianDataApplication : Application(), ImageLoaderFactory {
     lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
         container = DefaultAppContainer()
     }
+
+    override fun newImageLoader(): ImageLoader {
+        return ImageLoader(this).newBuilder()
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(0.1)
+                    .strongReferencesEnabled(true)
+                    .build()
+            }
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .diskCache {
+                DiskCache.Builder()
+                    .maxSizePercent(0.03)
+                    .directory(cacheDir)
+                    .build()
+            }
+            .logger(DebugLogger())
+            .build()
+    }
+
 }
